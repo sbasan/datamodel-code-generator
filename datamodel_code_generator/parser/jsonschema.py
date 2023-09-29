@@ -5,6 +5,7 @@ from collections import defaultdict
 from contextlib import contextmanager
 from functools import lru_cache
 from pathlib import Path
+import re
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -1448,6 +1449,14 @@ class JsonSchemaParser(Parser):
             return reference
 
         if is_url(ref):
+            if isinstance(self.source, ParseResult):
+                scheme, netloc, *_ = self.source
+                source_path = f"{scheme}://{netloc}/apidocs"
+                sub_ref = re.sub("https://cisco.com", source_path, ref)
+                if not re.findall("apidocs/schema", sub_ref):
+                    source_path += "/schema"
+                    sub_ref = re.sub("https://cisco.com", source_path, ref)
+                ref = sub_ref
             relative_path, object_path = ref.split('#')
             relative_paths = [relative_path]
             base_path = None
