@@ -1,3 +1,13 @@
+# This is a fork of https://github.com/koxudaxi/datamodel-code-generator
+It contains some hacks to allow datamodel creation from running vmanage instance
+- custom vManage authentication scheme added using `USER` and `PASSWORD` environment variables
+- resolve references starting with `www.cisco.com` to specific remote (they are not avaiable on internet as advertised)
+## Usage:
+```
+export USER=user
+export PASSWORD=password
+datamodel-codegen --url https://<vmanage-host>/apidocs/vmanageapi.json --http-ignore-tls --disable-warnings --output vmanageapi.py
+```
 # datamodel-code-generator
 
 This code generator creates [pydantic v1 and v2](https://docs.pydantic.dev/) model, [dataclasses.dataclass](https://docs.python.org/3/library/dataclasses.html) and [typing.TypedDict](https://docs.python.org/3/library/typing.html#typing.TypedDict) from an openapi file and others.
